@@ -1,0 +1,155 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f1f5f9;
+    padding: 20px;
+}
+
+.wrapper {
+    max-width: 1200px;
+    margin: auto;
+}
+
+.title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    color: #1e293b;
+    margin-bottom: 25px;
+}
+
+.filter-box {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    margin-bottom: 30px;
+}
+
+.filter-row {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.filter-item {
+    flex: 1;
+    min-width: 200px;
+}
+
+.filter-item label {
+    font-size: 13px;
+    font-weight: bold;
+    color: #475569;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.filter-item select,
+.filter-item input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 12px;
+    border: 1px solid #cbd5e1;
+    font-size: 14px;
+    outline: none;
+}
+
+.reset-btn {
+    background: #e2e8f0;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.reset-btn:hover {
+    background: #cbd5e1;
+}
+
+.result-info {
+    font-size: 15px;
+    color: #475569;
+    margin-bottom: 15px;
+}
+
+.bike-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.bike-card {
+    background: white;
+    padding: 15px;
+    border-radius: 18px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+}
+
+.bike-card img {
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 10px;
+}
+
+.bike-card h3 {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.bike-card p {
+    font-size: 13px;
+    color: #64748b;
+    margin-bottom: 2px;
+}
+
+.status {
+    display: inline-block;
+    font-size: 12px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+}
+
+.available {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.rented {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.book-btn {
+    margin-top: auto;
+    padding: 10px;
+    text-align: center;
+    border-radius: 12px;
+    font-weight: bold;
+    color: white;
+    background: #4f46e5;
+    cursor: pointer;
+    border: none;
+}
+
+.book-btn:hover {
+    background: #4338ca;
+}
+
+.book-btn.disabled {
+    background: #cbd5e1;
+    cursor: not-allowed;
+}

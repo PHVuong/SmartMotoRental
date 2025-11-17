@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Lọc xe - SmartBike</title>
+    <link rel="stylesheet" href="locxe.css">
+</head>
+<body>
+
+<div class="wrapper">
+    <h1 class="title">🔍 Tìm kiếm & Lọc xe</h1>
+
+    <div class="filter-box">
+
+        <div class="filter-row">
+            <div class="filter-item">
+                <label>Tìm kiếm theo tên xe</label>
+                <input type="text" id="searchInput" placeholder="Nhập tên xe...">
+            </div>
+
+            <div class="filter-item">
+                <label>Sắp xếp theo giá</label>
+                <select id="sortSelect">
+                    <option value="">Mặc định</option>
+                    <option value="asc">Giá tăng dần</option>
+                    <option value="desc">Giá giảm dần</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="filter-row">
+            <div class="filter-item">
+                <label>Loại xe</label>
+                <select id="typeFilter">
+                    <option value="">Tất cả</option>
+                    <option value="Xe số">Xe số</option>
+                    <option value="Tay ga">Tay ga</option>
+                    <option value="Côn tay">Côn tay</option>
+                </select>
+            </div>
+
+            <div class="filter-item">
+                <label>Khoảng giá / ngày</label>
+                <select id="priceFilter">
+                    <option value="">Tất cả</option>
+                    <option value="1">Dưới 150.000đ</option>
+                    <option value="2">150.000đ - 250.000đ</option>
+                    <option value="3">Trên 250.000đ</option>
+                </select>
+            </div>
+
+            <div class="filter-item">
+                <label>Tình trạng</label>
+                <select id="statusFilter">
+                    <option value="">Tất cả</option>
+                    <option value="available">Còn trống</option>
+                    <option value="rented">Đang thuê</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="filter-row">
+            <div class="filter-item">
+                <label>Khu vực</label>
+                <select id="areaFilter">
+                    <option value="">Tất cả</option>
+                    <option value="Hải Châu">Hải Châu</option>
+                    <option value="Sơn Trà">Sơn Trà</option>
+                    <option value="Ngũ Hành Sơn">Ngũ Hành Sơn</option>
+                </select>
+            </div>
+
+            <div class="filter-item">
+                <button id="resetBtn" class="reset-btn">Xóa bộ lọc</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="resultInfo" class="result-info"></div>
+
+    <div id="bikeList" class="bike-grid"></div>
+
+</div>
+
+<script>
+const bikes = [
+  { id: 1, name: "Honda Wave Alpha", brand: "Honda", type: "Xe số", year: 2022, price: 120000, status: "available", area: "Hải Châu", image: "img/wave.png" },
+  { id: 2, name: "Yamaha Exciter 150", brand: "Yamaha", type: "Côn tay", year: 2021, price: 180000, status: "rented", area: "Sơn Trà", image: "img/exciter.png" },
+  { id: 3, name: "Honda SH 150i", brand: "Honda", type: "Tay ga", year: 2023, price: 350000, status: "available", area: "Ngũ Hành Sơn", image: "img/sh150.png" },
+  { id: 4, name: "Honda Vision", brand: "Honda", type: "Tay ga", year: 2020, price: 150000, status: "available", area: "Hải Châu", image: "img/vision.png" },
+  { id: 5, name: "Honda Air Blade", brand: "Honda", type: "Tay ga", year: 2023, price: 250000, status: "available", area: "Sơn Trà", image: "img/airblade.png" },
+  { id: 6, name: "Yamaha Sirius", brand: "Yamaha", type: "Xe số", year: 2023, price: 110000, status: "available", area: "Ngũ Hành Sơn", image: "img/sirius.png" }
+];
+
+const searchInput = document.getElementById("searchInput");
+const typeFilter = document.getElementById("typeFilter");
+const priceFilter = document.getElementById("priceFilter");
+const statusFilter = document.getElementById("statusFilter");
+const areaFilter = document.getElementById("areaFilter");
+const sortSelect = document.getElementById("sortSelect");
+const resetBtn = document.getElementById("resetBtn");
+const bikeList = document.getElementById("bikeList");
+const resultInfo = document.getElementById("resultInfo");
+
+function matchPriceRange(price, range) {
+    if (range === "1") return price < 150000;
+    if (range === "2") return price >= 150000 && price <= 250000;
+    if (range === "3") return price > 250000;
+    return true;
+}
+
+function renderBikes() {
+    const search = searchInput.value.toLowerCase();
+
+    let filtered = bikes.filter(b => {
+        return (
+            (b.name.toLowerCase().includes(search) || b.brand.toLowerCase().includes(search)) &&
+            (typeFilter.value ? b.type === typeFilter.value : true) &&
+            matchPriceRange(b.price, priceFilter.value) &&
+            (statusFilter.value ? b.status === statusFilter.value : true) &&
+            (areaFilter.value ? b.area === areaFilter.value : true)
+        );
+    });
+
+    if (sortSelect.value === "asc") filtered.sort((a,b)=>a.price-b.price);
+    if (sortSelect.value === "desc") filtered.sort((a,b)=>b.price-a.price);
+
+    bikeList.innerHTML = "";
+    resultInfo.innerHTML = filtered.length + " xe phù hợp.";
+
+    filtered.forEach(b => {
+        bikeList.innerHTML += `
+            <div class="bike-card">
+                <img src="${b.image}">
+                <h3>${b.name}</h3>
+                <p>${b.brand} • ${b.type} • ${b.year}</p>
+                <p>Khu vực: <b>${b.area}</b></p>
+                <span class="status ${b.status === "available" ? "available" : "rented"}">
+                    ${b.status === "available" ? "Còn trống" : "Đang thuê"}
+                </span>
+
+                <button class="book-btn ${b.status !== "available" ? "disabled" : ""}">
+                    ${b.status === "available" ? "Đặt xe" : "Không khả dụng"}
+                </button>
+            </div>
+        `;
+    });
+}
+
+[searchInput, typeFilter, priceFilter, statusFilter, areaFilter, sortSelect].forEach(el=>{
+    el.addEventListener("input", renderBikes);
+    el.addEventListener("change", renderBikes);
+});
+
+resetBtn.addEventListener("click", ()=>{
+    searchInput.value = "";
+    typeFilter.value = "";
+    priceFilter.value = "";
+    statusFilter.value = "";
+    areaFilter.value = "";
+    sortSelect.value = "";
+    renderBikes();
+});
+
+renderBikes();
+</script>
+
+</body>
+</html>

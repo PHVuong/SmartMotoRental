@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Thông báo - SmartBike</title>
+    <link rel="stylesheet" href="thongbao.css">
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <div>
+            <h1>Thông báo</h1>
+            <p>Xem thông báo từ hệ thống</p>
+        </div>
+        <button id="clearAll" class="clear-btn">Xóa tất cả</button>
+    </div>
+
+    <div id="notificationList" class="list"></div>
+
+</div>
+
+<script>
+const notifications = [
+    { id: 1, title: "Đơn thuê #SB1234 đã được xác nhận", content: "Bạn sẽ nhận xe vào lúc 09:00 ngày mai.", time: "5 phút trước" },
+    { id: 2, title: "Nhắc nhở trả xe", content: "Đơn #SB1189 sẽ hết hạn lúc 18:00 hôm nay.", time: "30 phút trước" },
+    { id: 3, title: "Khuyến mãi cuối tuần", content: "Giảm 20% cho đơn thuê từ 2 ngày.", time: "2 giờ trước" },
+    { id: 4, title: "Xe yêu thích có sẵn", content: "Exciter 150 hiện đang còn trống.", time: "Hôm qua" }
+];
+
+const list = document.getElementById("notificationList");
+const clearAll = document.getElementById("clearAll");
+
+function render() {
+    list.innerHTML = "";
+    if (notifications.length === 0) {
+        list.innerHTML = `<div class="empty">Hiện không có thông báo nào.</div>`;
+        return;
+    }
+
+    notifications.forEach(n => {
+        const div = document.createElement("div");
+        div.className = "card";
+        div.innerHTML = `
+            <button class="delete-btn" data-id="${n.id}">×</button>
+            <h2>${n.title}</h2>
+            <p>${n.content}</p>
+            <p class="time">${n.time}</p>
+        `;
+        list.appendChild(div);
+    });
+
+    document.querySelectorAll(".delete-btn").forEach(btn => {
+        btn.onclick = () => {
+            const id = Number(btn.getAttribute("data-id"));
+            const index = notifications.findIndex(x => x.id === id);
+            notifications.splice(index, 1);
+            render();
+        };
+    });
+}
+
+clearAll.onclick = () => {
+    notifications.splice(0, notifications.length);
+    render();
+};
+
+render();
+</script>
+
+</body>
+</html>
